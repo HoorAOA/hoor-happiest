@@ -9,6 +9,7 @@ import { StackParamList } from '../constants/types';
 import { useColorScheme } from '../hooks/colorHooks/useColorScheme';
 import { connectToDatabase, dbInitializer } from '../db/db';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import LoginScreen from './login/LoginScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -37,6 +38,10 @@ function App() {
               }}>
                 <Stack.Screen name="Splash"
                   component={SplashScreen}
+                  options={{ headerShown: false }} />
+
+                <Stack.Screen name="Login"
+                  component={LoginScreen}
                   options={{ headerShown: false }} />
 
               </Stack.Navigator>

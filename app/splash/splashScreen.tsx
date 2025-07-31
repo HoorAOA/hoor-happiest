@@ -42,7 +42,7 @@ export default function SplashScreen({ navigation }: PropsSplash) {
 
     const redirectToNextScreen = async () => {
         const db = await connectToDatabase()
-        // navigation.replace('Login')
+        navigation.replace('Login')
     };
 
     const getAppLanguages = async () => {
