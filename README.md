@@ -1,97 +1,101 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
-
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
-## Step 1: Start Metro
+## How to run the app
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
-
+Redirect to project folder, using terminal:
 ```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+cd hoor-happiest
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
+For android, to add environment variables run the following commands:
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+```
+```sh
+source ~/.zshrc
 ```
 
-### iOS
+For iOS:
+Open project in XCode, click on the project -> signing & Capabilities, Under signing select a team.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
+For Android and IOS make sure to run this command (to install node modules) inside the project root folder:
 ```sh
-bundle install
+npm install
 ```
 
-Then, and every time you update your native dependencies, run:
-
+To run the app, make sure your android emulator/ios simulator is open or physical device is connected with usb cable the run the following command:
 ```sh
-bundle exec pod install
+# for android
+cd hoor-happiest
+npx react-native run-android
+
+# ios, in project root folder
+cd hoor-happiest
+cd ios
+pod install
+cd ..
+npx react-native run-ios
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
 
-```sh
-# Using npm
-npm run ios
+## Functionalities
 
-# OR using Yarn
-yarn ios
-```
+- Splash screen : 
+Implemented **Firebase storage** call to fetch language list with locale. Language list is **saved locally using react-native-sqlite-storage**
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+![App Screenshot](./assets/screenshots/ic_splash_screenshot.jpeg)
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+----------------------------------------------------------------------------------
 
-## Step 3: Modify your app
+- Login screen : 
+Validation with state handling, You can enter any username and password, **mock data** is used.
 
-Now that you have successfully run the app, let's make changes!
+![App Screenshot](./assets/screenshots/ic_validation_screenshot.jpeg)
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+![App Screenshot](./assets/screenshots/ic_login_screenshot.jpeg)
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+----------------------------------------------------------------------------------
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- Home screen : 
+**List of Events api call**, search, **add/remove favourite events** (added to local storage).
 
-## Congratulations! :tada:
+![App Screenshot](./assets/screenshots/ic_events_list_screenshot.jpeg)
 
-You've successfully run and modified your React Native App. :partying_face:
+![App Screenshot](./assets/screenshots/ic_search_screenshot.jpeg)
 
-### Now what?
+![App Screenshot](./assets/screenshots/ic_no_data_screenshot.jpeg)
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+![App Screenshot](./assets/screenshots/ic_favourite_screenshot.jpeg)
 
-# Troubleshooting
+----------------------------------------------------------------------------------
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- Event Details screen:
+Call **details api** in home screen and pass response to Details screen.
 
-# Learn More
+![App Screenshot](./assets/screenshots/ic_details_screenshot.jpeg)
 
-To learn more about React Native, take a look at the following resources:
+----------------------------------------------------------------------------------
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Profile screen : 
+Data saved in login screen and **loaded from local storage**.
+
+![App Screenshot](./assets/screenshots/ic_profile_screenshot.jpeg)
+
+----------------------------------------------------------------------------------
+
+- Select Language :
+Languages loaded from loacl storage, on selection **set app language and locale (RTL/LTR)**.  
+
+![App Screenshot](./assets/screenshots/ic_drawer_screenshot.jpeg)
+
+![App Screenshot](./assets/screenshots/ic_language_screenshot.jpeg)
+
+----------------------------------------------------------------------------------
+
+- Logout :
+Clear user data and preferences and redirect to login screen.  
+
+![App Screenshot](./assets/screenshots/ic_logout_screenshot.jpeg)
