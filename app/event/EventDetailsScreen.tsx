@@ -16,6 +16,7 @@ import FavouriteEvents from '../../data/FavouriteEvents';
 import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
 import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
 import { ThemedView } from '../../components/ThemedView';
+import { I18nManager } from 'react-native';
 
 export default function EventDetailsScreen({ navigation, route }: PropsHome) {
     const { passedValues } = route.params;
@@ -24,7 +25,7 @@ export default function EventDetailsScreen({ navigation, route }: PropsHome) {
         <>
             <SafeAreaView style={styles.safeAreaStyle} >
                 <ThemedHeader
-                    firstButtonProps={{ iconUrl: Icons.ic_back, dimension: 20, handlePress: () => navigation.goBack() }}
+                    firstButtonProps={{ iconUrl: I18nManager.isRTL ? Icons.ic_next : Icons.ic_back, dimension: 20, handlePress: () => navigation.goBack() }}
                     iconProps={{}}
                     textHeaderProps={{ text: passedValues[0].name }}
                 />

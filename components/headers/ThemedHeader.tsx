@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    direction: 'inherit'
   },
   container: {
     paddingHorizontal: 16,

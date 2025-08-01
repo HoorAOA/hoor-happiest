@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, Platform, Linking, ActivityIndicator, ImageBackground, BackHandler } from 'react-native';
-import APPCONSTANTS from '../../constants/AppConstants';
 import { CustomStatusBar } from '../../components/headers/CustomStatusBar';
 import { PropsSplash } from '../../constants/types';
 import DeviceInfo from 'react-native-device-info';
 import ActionDialog from '../../components/dialogs/ActionDialog';
-import * as Keychain from 'react-native-keychain';
 import NetInfo from '@react-native-community/netinfo';
 import { ThemedText } from '../../components/ThemedText';
 import { ThemedView } from '../../components/ThemedView';
@@ -76,7 +74,7 @@ export default function SplashScreen({ navigation }: PropsSplash) {
             const languageList: Languages[] = [];
 
             for (const [name, id] of Object.entries(languages)) {
-                const lang = new Languages(Number(id), name); // or reverse if needed
+                const lang = new Languages(id, name); // or reverse if needed
                 languageList.push(lang);
             }
 

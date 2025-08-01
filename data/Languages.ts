@@ -1,10 +1,10 @@
 
 
 export default class Languages {
-    languageId: number;
+    languageId: string;
     languageName: string;
 
-    constructor(languageId : number, languageName: string) {
+    constructor(languageId : string, languageName: string) {
         this.languageId = languageId;
         this.languageName = languageName;
     }

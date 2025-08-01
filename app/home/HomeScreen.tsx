@@ -15,6 +15,7 @@ import { Events } from '../../data/Events';
 import FavouriteEvents from '../../data/FavouriteEvents';
 import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
 import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
+import i18n from '../../localization/i18n';
 
 export default function HomeScreen({ navigation }: PropsHome) {
 
@@ -156,12 +157,12 @@ export default function HomeScreen({ navigation }: PropsHome) {
                 <ThemedHeader
                     firstButtonProps={{ iconUrl: Icons.ic_menu, dimension: 20, handlePress: () => navigation.toggleDrawer() }}
                     iconProps={{}}
-                    textHeaderProps={{ text: 'Home' }}
+                    textHeaderProps={{ text: i18n.t('home') }}
                 />
 
 <View style={{ height: 25 }} />
 
-                <View style={[styles.inputContainer, { width: '90%', height: 50, direction: 'ltr' }]}>
+                <View style={[styles.inputContainer, { width: '90%', height: 50 }]}>
                     <TextInput
                         style={styles.input}
                         value={searchQuery}

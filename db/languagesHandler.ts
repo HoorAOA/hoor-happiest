@@ -7,7 +7,7 @@ const addLanguages = async (db: SQLiteDatabase, languages: Languages[]) => {
      VALUES
    `
 
-    let dataArray : (number | string)[] = []
+    let dataArray : (string | string)[] = []
     
     languages.forEach((language, index) => {
         insertQuery += `(?, ?)${index < languages.length - 1 ? ',' : ''} `;

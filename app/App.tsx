@@ -13,10 +13,28 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LoginScreen from './login/LoginScreen';
 import DrawerNavigator from '../components/DrawerNavigator';
 import EventDetailsScreen from './event/EventDetailsScreen';
+import { getSingleUserPreference } from '../db/sharedPreferencesHandler';
+import { I18nManager } from 'react-native';
+import i18n from '../localization/i18n';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
+
+
 function App() {
+  useEffect(() => {
+    const loadLanguage = async () => {
+       const db = await connectToDatabase()
+        var storedLang = await getSingleUserPreference(db, 'app_language')
+      const langCode = storedLang || 'en';
+
+      i18n.locale = langCode;
+      I18nManager.forceRTL(langCode === 'ar');
+    };
+
+    loadLanguage();
+  }, []);
+  
   const colorScheme = useColorScheme() === 'dark';
   const loadData = useCallback(async () => {
     try {
