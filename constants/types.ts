@@ -1,19 +1,31 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { StatusBarProps } from 'react-native';
+
 export type StackParamList = {
   Splash: undefined;
   Login: undefined;
+  MainDrawer: undefined;
+  Home: undefined;
+};
+
+type DrawerParamList = {
+  Home: undefined;
+  Profile: undefined;
+  Logout: undefined;
 };
 
 /////////////////////////
-
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type PropsSplash = NativeStackScreenProps<StackParamList, 'Splash'>;
 
 export type PropsLogin = NativeStackScreenProps<StackParamList, 'Login'>;
 
+export type PropsHome = { navigation: CompositeNavigationProp<DrawerNavigationProp<DrawerParamList, 'Home'>, NativeStackNavigationProp<StackParamList>>; route: any; };
+
 /////////////////////////
 
-import { StatusBarProps } from 'react-native';
 
 export type CustomStatusBarProps = {
   backgroundColor: string;

@@ -42,7 +42,13 @@ export default function SplashScreen({ navigation }: PropsSplash) {
 
     const redirectToNextScreen = async () => {
         const db = await connectToDatabase()
-        navigation.replace('Login')
+        var fetchIsLoggedIn = await getSingleUserPreference(db, 'is_logged_in')
+      
+        if (fetchIsLoggedIn == "true") {
+            navigation.replace('Home')
+        } else {
+            navigation.replace('Login')
+        }
     };
 
     const getAppLanguages = async () => {

@@ -4,7 +4,7 @@ import ButtonTransBg from '../buttons/ButtonTransBg';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 
-export const ThemedHeader = ({ firstButtonProps, iconProps, textHeaderProps, secondButtonProps } : {firstButtonProps : any, iconProps : any, textHeaderProps : any, secondButtonProps : any} ) => {
+export const ThemedHeader = ({ firstButtonProps, iconProps, textHeaderProps } : {firstButtonProps : any, iconProps : any, textHeaderProps : any} ) => {
   return (
     <ThemedView style={styles.container} >
       <ButtonTransBg {...firstButtonProps} />
@@ -12,7 +12,6 @@ export const ThemedHeader = ({ firstButtonProps, iconProps, textHeaderProps, sec
         {iconProps && <Image {...iconProps} />}
         {textHeaderProps && <ThemedText type='largeBold' {...textHeaderProps}>{textHeaderProps.text}</ThemedText>}
       </View>
-      <ButtonTransBg {...secondButtonProps} />
     </ThemedView>
   )
 }
