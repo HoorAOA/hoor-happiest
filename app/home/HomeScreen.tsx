@@ -13,7 +13,7 @@ import Icons from '../../constants/Icons';
 import eventsListUseFetch from '../../hooks/eventsListUseFetch';
 import { Events } from '../../data/Events';
 import FavouriteEvents from '../../data/FavouriteEvents';
-import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
+import { addFavouriteEvents, getFavouriteEvents, removeFavoriteEvent } from '../../db/favouriteEventsHandler';
 import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
 import i18n from '../../localization/i18n';
 
@@ -117,23 +117,36 @@ export default function HomeScreen({ navigation }: PropsHome) {
         try {
             const db = await connectToDatabase();
 
-            const favourite: FavouriteEvents = {
-                id: eventItem.id,
-                name: eventItem.name,
-                startDate: eventItem.dates.start.localDate + ' ' + eventItem.dates.start.localTime,
-                imagesUrl: eventItem.images[0].url,
-            };
+            const isAlreadyFavorite = favorites.some(fav => fav.id === eventItem.id);
+            console.log("isAlreadyFavorite::", isAlreadyFavorite)
 
-            await addFavouriteEvents(db, [favourite]);
+            if (isAlreadyFavorite) {
+                setFavorites(prev => prev.filter(fav => fav.id !== eventItem.id));
+                await removeFavoriteEvent(db, eventItem.id);
 
-            setFavorites(prev => [...prev, favourite]);
+            } else {
+                const favouriteTmp: FavouriteEvents = {
+                    id: eventItem.id,
+                    name: eventItem.name,
+                    startDate: eventItem.dates.start.localDate + ' ' + eventItem.dates.start.localTime,
+                    imagesUrl: eventItem.images[0].url,
+                };
+                setFavorites(prev => [...prev, favouriteTmp]);
+                await addFavouriteEvents(db, [favouriteTmp]);
+
+            }
 
         } catch (error) {
-            console.error("Failed to add to favorites:", error);
+            console.error("Failed to toggle favorite:", error);
         }
     };
 
-    const isFavorite = (eventId: string) => favorites.some(fav => fav.event_id === eventId);
+    const isFavorite = (eventId: string) => {
+        const result = favorites.some(fav => fav.id === eventId)
+        console.log("favorites", favorites)
+        console.log("result", result)
+        return result
+    };
 
     // event details
     const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -151,6 +164,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
         }
     }, [loadingId])
 
+
     return (
         <>
             <SafeAreaView style={styles.safeAreaStyle} >
@@ -160,7 +174,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
                     textHeaderProps={{ text: i18n.t('home') }}
                 />
 
-<View style={{ height: 25 }} />
+                <View style={{ height: 25 }} />
 
                 <View style={[styles.inputContainer, { width: '90%', height: 50 }]}>
                     <TextInput

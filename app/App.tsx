@@ -24,9 +24,13 @@ const Stack = createNativeStackNavigator<StackParamList>();
 function App() {
   useEffect(() => {
     const loadLanguage = async () => {
-       const db = await connectToDatabase()
-        var storedLang = await getSingleUserPreference(db, 'app_language')
-      const langCode = storedLang || 'en';
+      var storedLang = 'en';
+      try {
+        const db = await connectToDatabase()
+        storedLang = await getSingleUserPreference(db, 'app_language') ?? 'en';
+      } catch (error){}
+       
+      const langCode = storedLang;
 
       i18n.locale = langCode;
       I18nManager.forceRTL(langCode === 'ar');
@@ -34,7 +38,7 @@ function App() {
 
     loadLanguage();
   }, []);
-  
+
   const colorScheme = useColorScheme() === 'dark';
   const loadData = useCallback(async () => {
     try {
