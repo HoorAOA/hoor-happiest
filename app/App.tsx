@@ -12,6 +12,7 @@ import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LoginScreen from './login/LoginScreen';
 import DrawerNavigator from '../components/DrawerNavigator';
+import EventDetailsScreen from './event/EventDetailsScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -32,28 +33,32 @@ function App() {
   }, [loadData])
 
   return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-          <NavigationContainer theme={colorScheme ? DarkTheme : DefaultTheme}>
-            <SafeAreaView style={styles.safeAreaStyle}>
-              <Stack.Navigator initialRouteName="Splash" screenOptions={{
-                headerShown: false
-              }}>
-                <Stack.Screen name="Splash"
-                  component={SplashScreen}
-                  options={{ headerShown: false }} />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer theme={colorScheme ? DarkTheme : DefaultTheme}>
+        <SafeAreaView style={styles.safeAreaStyle}>
+          <Stack.Navigator initialRouteName="Splash" screenOptions={{
+            headerShown: false
+          }}>
+            <Stack.Screen name="Splash"
+              component={SplashScreen}
+              options={{ headerShown: false }} />
 
-                <Stack.Screen name="Login"
-                  component={LoginScreen}
-                  options={{ headerShown: false }} />
+            <Stack.Screen name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }} />
 
-                  <Stack.Screen name="MainDrawer"
-                  component={DrawerNavigator}
-                  options={{ headerShown: false }} />
+            <Stack.Screen name="EventDetails"
+              component={EventDetailsScreen}
+              options={{ headerShown: false }} />
 
-              </Stack.Navigator>
-            </SafeAreaView>
-          </NavigationContainer>
-      </GestureHandlerRootView>
+            <Stack.Screen name="MainDrawer"
+              component={DrawerNavigator}
+              options={{ headerShown: false }} />
+
+          </Stack.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

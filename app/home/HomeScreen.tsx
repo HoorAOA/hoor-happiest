@@ -14,6 +14,7 @@ import eventsListUseFetch from '../../hooks/eventsListUseFetch';
 import { Events } from '../../data/Events';
 import FavouriteEvents from '../../data/FavouriteEvents';
 import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
+import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
 
 export default function HomeScreen({ navigation }: PropsHome) {
 
@@ -133,6 +134,22 @@ export default function HomeScreen({ navigation }: PropsHome) {
 
     const isFavorite = (eventId: string) => favorites.some(fav => fav.event_id === eventId);
 
+    // event details
+    const [loadingId, setLoadingId] = useState<string | null>(null);
+    const { eventsDetailsData, isLoadingEventDetails, errorEventDetails, refetchEventDetails } = eventDetailsUseFetch({ loadingId })
+
+    useEffect(() => {
+        if (eventsDetailsData) {
+            navigation.navigate('EventDetails', { passedValues: eventsDetailsData })
+        }
+    }, [eventsDetailsData])
+
+    useEffect(() => {
+        if (loadingId) {
+            refetchEventDetails()
+        }
+    }, [loadingId])
+
     return (
         <>
             <SafeAreaView style={styles.safeAreaStyle} >
@@ -193,11 +210,14 @@ export default function HomeScreen({ navigation }: PropsHome) {
 
                                     <View style={{ width: 7 }} />
 
-                                    <TouchableOpacity onPress={() => {
-                                        // redirect to details
-                                    }}>
-                                        <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
-                                    </TouchableOpacity>
+                                    {loadingId === item.id && isLoadingEventDetails ? (
+                                        <ActivityIndicator size="small" color="#000" style={styles.icon} />
+                                    ) : (
+                                        <TouchableOpacity onPress={() => setLoadingId(item.id)}>
+                                            <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
+                                        </TouchableOpacity>
+                                    )}
+
                                 </View>
 
                             </View>

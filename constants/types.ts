@@ -6,6 +6,7 @@ import { StatusBarProps } from 'react-native';
 export type StackParamList = {
   Splash: undefined;
   Login: undefined;
+  EventDetails: { passedValues : any };
   MainDrawer: undefined;
 };
 
@@ -20,6 +21,8 @@ type DrawerParamList = {
 export type PropsSplash = NativeStackScreenProps<StackParamList, 'Splash'>;
 
 export type PropsLogin = NativeStackScreenProps<StackParamList, 'Login'>;
+
+export type PropsEventDetails = NativeStackScreenProps<StackParamList, 'EventDetails'>;
 
 export type PropsHome = { navigation: CompositeNavigationProp<DrawerNavigationProp<DrawerParamList, 'Home'>, NativeStackNavigationProp<StackParamList>>; route: any; };
 

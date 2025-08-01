@@ -10,7 +10,7 @@ export const ThemedHeader = ({ firstButtonProps, iconProps, textHeaderProps } : 
       <ButtonTransBg {...firstButtonProps} />
       <View style={styles.centerViewContent}>
         {iconProps && <Image {...iconProps} />}
-        {textHeaderProps && <ThemedText type='largeBold' {...textHeaderProps}>{textHeaderProps.text}</ThemedText>}
+        {textHeaderProps && <ThemedText style={{textAlign: 'center'}} type='largeBold' {...textHeaderProps}>{textHeaderProps.text}</ThemedText>}
       </View>
       <View style={{width: 40}}/>
     </ThemedView>
