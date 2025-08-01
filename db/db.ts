@@ -32,9 +32,19 @@ const dbInitializer = async (db: SQLiteDatabase) => {
       )
     `
 
+    const favouriteEventsQuery = `
+      CREATE TABLE IF NOT EXISTS favourites (
+          event_id TEXT PRIMARY KEY,
+          event_name TEXT,
+          start_date TEXT,
+          image_url TEXT
+      )
+    `
+
   try {
     await db.executeSql(userPreferencesQuery)
     await db.executeSql(languagesQuery)
+    await db.executeSql(favouriteEventsQuery)
   } catch (error) {
     console.error(error)
     throw Error(`Failed to create tables`)

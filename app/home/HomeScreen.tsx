@@ -1,6 +1,5 @@
 
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
-import { COLORS } from '../../constants/constants';
 import { ThemedHeader } from '../../components/headers/ThemedHeader';
 import { ThemedText } from '../../components/ThemedText';
 import React, { useMemo, useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
@@ -13,6 +12,8 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import Icons from '../../constants/Icons';
 import eventsListUseFetch from '../../hooks/eventsListUseFetch';
 import { Events } from '../../data/Events';
+import FavouriteEvents from '../../data/FavouriteEvents';
+import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
 
 export default function HomeScreen({ navigation }: PropsHome) {
 
@@ -93,6 +94,45 @@ export default function HomeScreen({ navigation }: PropsHome) {
         }
     }, [errorEvents]);
 
+    // favourite events
+    const [favorites, setFavorites] = useState<FavouriteEvents[]>([]);
+
+    useEffect(() => {
+        const loadFavorites = async () => {
+            try {
+                const db = await connectToDatabase();
+                const favs = await getFavouriteEvents(db);
+                setFavorites(favs);
+            } catch (error) {
+                console.error("Failed to load favorites:", error);
+            }
+        };
+
+        loadFavorites();
+    }, []);
+
+    const handleFavoritePress = async (eventItem: Events) => {
+        try {
+            const db = await connectToDatabase();
+
+            const favourite: FavouriteEvents = {
+                id: eventItem.id,
+                name: eventItem.name,
+                startDate: eventItem.dates.start.localDate + ' ' + eventItem.dates.start.localTime,
+                imagesUrl: eventItem.images[0].url,
+            };
+
+            await addFavouriteEvents(db, [favourite]);
+
+            setFavorites(prev => [...prev, favourite]);
+
+        } catch (error) {
+            console.error("Failed to add to favorites:", error);
+        }
+    };
+
+    const isFavorite = (eventId: string) => favorites.some(fav => fav.event_id === eventId);
+
     return (
         <>
             <SafeAreaView style={styles.safeAreaStyle} >
@@ -130,25 +170,36 @@ export default function HomeScreen({ navigation }: PropsHome) {
                         renderItem={({ item }) => (
 
                             <View style={[styles.eventContainer]}>
-                                <TouchableOpacity onPress={() => {
-                                    // redirect to details
-                                }}>
-                                    <View style={styles.container}>
-                                        <Image
-                                            source={{ uri: item.images[0].url }}
-                                            style={styles.image}
-                                        />
 
-                                        <View style={styles.textContainer}>
-                                            <ThemedText type='mediumBold'>{item.name}</ThemedText>
-                                            <ThemedText type='xsmallMedium'>{item.dates.start.localDate} {item.dates.start.localTime}</ThemedText>
-                                        </View>
+                                <View style={styles.container}>
+                                    <TouchableOpacity
+                                        onPress={() => handleFavoritePress(item)}
+                                        style={{ padding: 4 }}
+                                    >
+                                        <Ionicons name={isFavorite(item.id) ? 'heart' : 'heart-outline'} size={24} color={isFavorite(item.id) ? 'red' : '#000'} />
+                                    </TouchableOpacity>
 
-                                        <View style={{ width: 7 }} />
+                                    <View style={{ width: 12 }} />
 
-                                        <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
+                                    <Image
+                                        source={{ uri: item.images[0].url }}
+                                        style={styles.image}
+                                    />
+
+                                    <View style={styles.textContainer}>
+                                        <ThemedText type='mediumBold'>{item.name}</ThemedText>
+                                        <ThemedText type='xsmallMedium'>{item.dates.start.localDate} {item.dates.start.localTime}</ThemedText>
                                     </View>
-                                </TouchableOpacity>
+
+                                    <View style={{ width: 7 }} />
+
+                                    <TouchableOpacity onPress={() => {
+                                        // redirect to details
+                                    }}>
+                                        <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
+                                    </TouchableOpacity>
+                                </View>
+
                             </View>
                         )}
                         ItemSeparatorComponent={() => (
@@ -161,11 +212,11 @@ export default function HomeScreen({ navigation }: PropsHome) {
                 {eventsData && eventsData.length == 0 &&
                     <View style={[styles.cardContainer, { justifyContent: 'center', height: 100, width: '90%' }]}>
                         <Ionicons color={'#CFC3C3'} size={40} name='file-tray' />
-                        <View style={{width: 15}} />
+                        <View style={{ width: 15 }} />
                         <ThemedText type='mediumBold' lightColor={'#CFC3C3'}>No events found</ThemedText>
                     </View>
                 }
-            </SafeAreaView>
+            </SafeAreaView >
             <ActionDialog
                 visible={dialogVisible}
                 title={dialogConfig.title}
