@@ -2,17 +2,36 @@
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
 import { COLORS } from '../../constants/constants';
 import { ThemedHeader } from '../../components/headers/ThemedHeader';
+import { ThemedText } from '../../components/ThemedText';
 import React, { useMemo, useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { PropsHome } from '../../constants/types';
 import { connectToDatabase } from '../../db/db';
 import ActionDialog from '../../components/dialogs/ActionDialog';
-import * as Keychain from 'react-native-keychain';
 import UserPreference from '../../data/UserPreference';
 import { addSharedPreferencesHandler } from '../../db/sharedPreferencesHandler';
-// import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import Icons from '../../constants/Icons';
+import eventsListUseFetch from '../../hooks/eventsListUseFetch';
+import { Events } from '../../data/Events';
 
 export default function HomeScreen({ navigation }: PropsHome) {
+
+    // // search
+    const [passedSearchQuery, setPassedSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const searchQueryRef = useRef<TextInput>(null);
+    const callSearchRequest = () => {
+        setPassedSearchQuery(searchQuery)
+    };
+
+    const [allEvents, setAllEvents] = useState<Events[]>([]);
+    const { eventsData, isLoadingEvents, errorEvents, refetchEvents } = eventsListUseFetch({ searchQuery })
+
+    useEffect(() => {
+        if (eventsData && Array.isArray(eventsData)) {
+            setAllEvents(eventsData);
+        }
+    }, [eventsData]);
 
     // dialog
     const [dialogVisible, setDialogVisible] = useState(false);
@@ -25,65 +44,55 @@ export default function HomeScreen({ navigation }: PropsHome) {
         onNegative: () => { }
     });
 
-    // // search
-    // const [passedSearchQuery, setPassedSearchQuery] = useState('');
-    // const [searchQuery, setSearchQuery] = useState('');
-    // const searchQueryRef = useRef<TextInput>(null);
-    // const callSearchRequest = () => {
-    //    setPassedSearchQuery(searchQuery)
-    // };
+    const clearUserData = async () => {
+        const db = await connectToDatabase()
+        await addSharedPreferencesHandler(db,
+            [new UserPreference('email', "")
+                , new UserPreference('mobile', "")
+                , new UserPreference('userName', "")
+                , new UserPreference('is_logged_in', 'false')
+            ]);
 
-    // // clear user data
-    // const clearUserData = async () => {
-    //     const db = await connectToDatabase()
-    //     await Keychain.setInternetCredentials('token', 'sge', "");
-    //     await addSharedPreferencesHandler(db,
-    //        [new UserPreference('email', "")
-    //                , new UserPreference('mobile', "")
-    //                , new UserPreference('userName', "")
-    //                , new UserPreference('is_logged_in', 'false')
-    //              ]);
-            
-    //         setDialogVisible(false)
+        setDialogVisible(false)
 
-    //         navigation.replace('Login')
-    // }
+        navigation.replace('Login')
+    }
 
-    // useEffect(() => {
-    //     if (errorStores) {
-    //         if (errorStores.includes('Session expired')) {
-    //             setDialogConfig({
-    //                 title: 'Session expired',
-    //                 message: `${errorStores}`,
-    //                 positiveButtonText: 'Logout',
-    //                 NegativeButtonText: '',
-    //                 onPositive: () => {
-    //                     clearUserData()
-                        
-    //                 },
-    //                 onNegative: () => {
-    //                     setDialogVisible(false)
-    //                 }
-    //             })
-    //         } else {
-    //             setDialogConfig({
-    //                 title: 'Request Failed',
-    //                 message: `${errorStores}`,
-    //                 positiveButtonText: 'Dismiss',
-    //                 NegativeButtonText: '',
-    //                 onPositive: () => {
-    //                     setDialogVisible(false)
-    //                 },
-    //                 onNegative: () => {
-    //                     setDialogVisible(false)
-    //                 }
-    //             })
-    //         }
+    useEffect(() => {
+        if (errorEvents) {
+            if (errorEvents.includes('Session expired')) {
+                setDialogConfig({
+                    title: 'Session expired',
+                    message: `${errorEvents}`,
+                    positiveButtonText: 'Logout',
+                    NegativeButtonText: '',
+                    onPositive: () => {
+                        clearUserData()
 
-    //         setDialogVisible(true)
-    //         return
-    //     }
-    // }, [errorStores]);
+                    },
+                    onNegative: () => {
+                        setDialogVisible(false)
+                    }
+                })
+            } else {
+                setDialogConfig({
+                    title: 'Request Failed',
+                    message: `${errorEvents}`,
+                    positiveButtonText: 'Dismiss',
+                    NegativeButtonText: '',
+                    onPositive: () => {
+                        setDialogVisible(false)
+                    },
+                    onNegative: () => {
+                        setDialogVisible(false)
+                    }
+                })
+            }
+
+            setDialogVisible(true)
+            return
+        }
+    }, [errorEvents]);
 
     return (
         <>
@@ -91,44 +100,73 @@ export default function HomeScreen({ navigation }: PropsHome) {
                 <ThemedHeader
                     firstButtonProps={{ iconUrl: Icons.ic_menu, dimension: 20, handlePress: () => navigation.toggleDrawer() }}
                     iconProps={{}}
-                    textHeaderProps={{ text: 'Home'}}
+                    textHeaderProps={{ text: 'Home' }}
                 />
-{/* 
-<View style={[styles.inputContainer, { width: '90%', height: 50 }]}>
-                        <TextInput
-                            style={styles.input}
-                            value={searchQuery}
-                            placeholder='Search by event or city'
-                            placeholderTextColor="#888"
-                            keyboardType='default'
-                            returnKeyType="done"
-                            onChangeText={(text) => setSearchQuery(text)}
-                            onSubmitEditing={() => searchQueryRef.current?.focus()}
-                        />
-                        <TouchableOpacity onPress={() => callSearchRequest()}>
-                            <Ionicons name="search" size={20} color={'#000000'} style={{ marginEnd: 12 }} />
-                        </TouchableOpacity>
+
+                <View style={[styles.inputContainer, { width: '90%', height: 50, direction: 'ltr' }]}>
+                    <TextInput
+                        style={styles.input}
+                        value={searchQuery}
+                        placeholder='Search by event or city'
+                        placeholderTextColor="#888"
+                        keyboardType='default'
+                        returnKeyType="done"
+                        onChangeText={(text) => setSearchQuery(text)}
+                        onSubmitEditing={() => searchQueryRef.current?.focus()}
+                    />
+                    <TouchableOpacity onPress={() => callSearchRequest()}>
+                        <Ionicons name="search" size={20} color={'#000000'} style={{ marginEnd: 12 }} />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{ height: 20 }} />
+
+                {isLoadingEvents && <ActivityIndicator size='small' color="#000000" />}
+
+                {allEvents && allEvents.length > 0 &&
+                    <FlatList
+                    style={{width: '90%', backgroundColor: "#60636a30", padding: 15, borderRadius: 6}}
+                        data={allEvents}
+                        keyExtractor={(item, index) => item.id?.toString()}
+                        renderItem={({ item }) => (
+
+                            <View style={[styles.eventContainer]}>
+                                <TouchableOpacity onPress={() => {
+                                    // redirect to details
+                                }}>
+                                    <View style={styles.container}>
+                                        <Image
+                                            source={{ uri: item.images[0].url }}
+                                            style={styles.image}
+                                        />
+
+                                        <View style={styles.textContainer}>
+                                            <ThemedText type='mediumBold'>{item.name}</ThemedText>
+                                            <ThemedText type='xsmallMedium'>{item.dates.start.localDate} {item.dates.start.localTime}</ThemedText>
+                                        </View>
+
+                                        <View style={{width: 7}} />
+
+                                        <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 7, backgroundColor: 'transparent' }} />
+                        )}
+                    />
+                }
+
+                {/* no data */}
+                {eventsData && eventsData.length == 0 &&
+                    <View style={[styles.cardContainer, { justifyContent: 'center', height: '100%' }]}>
+                        <Ionicons color={'#CFC3C3'} size={40} name='file-tray' />
+                        <ThemedText type='mediumBold' lightColor={'#CFC3C3'}>No events found</ThemedText>
                     </View>
-
-                    <View style={{ height: 12 }} />
-
-                <ScrollView showsVerticalScrollIndicator={true} style={{ backgroundColor: '#F2F2F2' }}>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        paddingBottom: 85,
-                        alignItems: 'center',
-
-                    }}>
-                        <View style={{ height: 15 }} />
-
-{/* todo:: add the list here  */}
-
-{/* <View style={{ height: 15 }} />
-                    </View>
-                </ScrollView> */}
+                }
             </SafeAreaView>
-            {/* <ActionDialog
+            <ActionDialog
                 visible={dialogVisible}
                 title={dialogConfig.title}
                 message={dialogConfig.message}
@@ -144,51 +182,25 @@ export default function HomeScreen({ navigation }: PropsHome) {
                     dialogConfig.onNegative()
                 }}
                 dismissable={false}
-            /> */}
+            />
         </>
     );
 }
 
 const styles = StyleSheet.create({
-    iconProps: {
-        width: '80%',
-        maxWidth: 200,
-        marginHorizontal: 35,
-        resizeMode: 'contain',
-        justifyContent: 'center'
-    },
     safeAreaStyle: {
         flex: 1,
-        backgroundColor: COLORS.light.background
+        backgroundColor: '#ffffff',
+        alignItems: 'center'
     },
     container: {
-        width: "80%",
-        alignSelf: 'center',
-        flex: 1
-    },
-    btnImg: {
-        width: 16,
-        height: 16,
-        resizeMode: 'contain'
-    },
-    buttonText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#000',
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     icon: {
         width: 24,
-        height: 30,
-        position: 'absolute',
-        right: 10,
-        top: 20,
+        height: 24,
+        marginLeft: 10
     },
     textInput: {
         marginTop: 10,
@@ -199,64 +211,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
     },
-    profileImageContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 90,
-        width: 90,
-        borderRadius: 70,
-        alignSelf: 'center',
-        backgroundColor: "#60636A"
-    },
-    profileImage: {
-        height: '100%',
-        width: '100%',
-        alignContent: 'center',
-        alignItems: 'center',
-        borderRadius: 70,
-        borderWidth: 5,
-        borderColor: '#D9D9D9'
-    },
-    editImgButton: {
-        backgroundColor: "#0074BA",
-        height: 30,
-        width: 30,
-        borderRadius: 20,
-        position: 'absolute',
-        left: -3,
-        bottom: -3,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    contentSeperator: {
-        height: 1,
-        backgroundColor: '#AAAAAA',
-        flex: 1,
-        opacity: 0.2,
-        marginVertical: 15
-    },
-    contentContainer: {
-        flex: 1,
-        marginTop: 20,
-        flexDirection: 'column'
-    },
-    bottomSheetContainer: {
-        marginHorizontal: 25,
-        paddingBottom: 5,
-        backgroundColor: 'transparent'
-    },
-    sheetContainer: {
-        backgroundColor: 'white',
-        borderTopStartRadius: 24,
-        borderTopEndRadius: 24,
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.75,
-        shadowRadius: 16.0,
-        elevation: 24,
-    },
     inputContainer: {
         borderRadius: 6,
         backgroundColor: "#FFFFFF",
@@ -266,14 +220,42 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     input: {
-    backgroundColor: '#ffffff',
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: '#AAAAAA',
-    borderRadius: 12,
-    height: 50,
-    fontSize: 12,
-    paddingHorizontal: 12,
-  },
+        backgroundColor: 'transparent',
+        justifyContent: "center",
+        alignItems: "center",
+        height: 50,
+        flex: 1,
+        fontSize: 12,
+        paddingHorizontal: 12,
+    },
+    eventContainer: {
+        borderRadius: 6,
+        backgroundColor: '#ffffff',
+        borderColor: '#CFC3C3',
+        borderWidth: 1,
+        padding: 15,
+        direction: 'ltr',
+        justifyContent: 'center'
+    
+    },
+    cardContainer: {
+        borderRadius: 6,
+        backgroundColor: "#ffffff",
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        padding: 12,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    image: {
+        width: 45,
+        height: 45,
+        borderRadius: 6,
+        marginRight: 10,
+    },
+    textContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
 });

@@ -92,10 +92,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#D9D9D9',
         borderRadius: 4
     },
-    tasksContainer: {
-        paddingVertical: 8,
-        backgroundColor: 'transparent'
-    },
     safeAreaStyle: {
         flex: 1,
         backgroundColor: '#ffffff'
@@ -138,11 +134,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 5,
         flexDirection: 'column'
-    },
-    updateInput: {
-        flex: 1,
-        paddingHorizontal: 12,
-        height: 50
     },
     rowContainer: {
         flexDirection: 'row',

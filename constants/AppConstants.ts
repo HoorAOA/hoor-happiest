@@ -1,6 +1,6 @@
 
 const APPCONSTANTS = {
-    base_url: "http://retailonsitedevelopment.com/api/v1",
+    base_url: "https://app.ticketmaster.com/discovery/v2",
     time_out: 3000
 }
 
