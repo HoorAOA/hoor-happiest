@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235300539177",
+    "project_id": "hoor-a03f7",
+    "storage_bucket": "hoor-a03f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235300539177:android:8e73367ad53cecbb8a0538",
+        "android_client_info": {
+          "package_name": "com.hoorhappiestminds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEion7tiaCxtwk-uHaSxzu5i8O6X8nGBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
