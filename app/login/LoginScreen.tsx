@@ -39,7 +39,7 @@ export default function LoginScreen({ navigation }: PropsLogin) {
    const db = await connectToDatabase()
     await addSharedPreferencesHandler(db, [new UserPreference('is_logged_in', 'true')]);
 
-    navigation.replace('Home')
+    navigation.replace('MainDrawer')
   };
 
 

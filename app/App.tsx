@@ -11,7 +11,7 @@ import { connectToDatabase, dbInitializer } from '../db/db';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LoginScreen from './login/LoginScreen';
-import HomeScreen from './home/HomeScreen';
+import DrawerNavigator from '../components/DrawerNavigator';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -46,8 +46,8 @@ function App() {
                   component={LoginScreen}
                   options={{ headerShown: false }} />
 
-                  <Stack.Screen name="Home"
-                  component={HomeScreen}
+                  <Stack.Screen name="MainDrawer"
+                  component={DrawerNavigator}
                   options={{ headerShown: false }} />
 
               </Stack.Navigator>

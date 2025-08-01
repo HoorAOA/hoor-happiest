@@ -45,7 +45,7 @@ export default function SplashScreen({ navigation }: PropsSplash) {
         var fetchIsLoggedIn = await getSingleUserPreference(db, 'is_logged_in')
       
         if (fetchIsLoggedIn == "true") {
-            navigation.replace('Home')
+            navigation.replace('MainDrawer')
         } else {
             navigation.replace('Login')
         }

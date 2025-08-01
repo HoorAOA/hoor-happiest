@@ -7,7 +7,6 @@ export type StackParamList = {
   Splash: undefined;
   Login: undefined;
   MainDrawer: undefined;
-  Home: undefined;
 };
 
 type DrawerParamList = {
