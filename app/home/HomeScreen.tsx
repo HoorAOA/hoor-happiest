@@ -17,15 +17,14 @@ import { Events } from '../../data/Events';
 export default function HomeScreen({ navigation }: PropsHome) {
 
     // // search
-    const [passedSearchQuery, setPassedSearchQuery] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const searchQueryRef = useRef<TextInput>(null);
-    const callSearchRequest = () => {
-        setPassedSearchQuery(searchQuery)
-    };
 
     const [allEvents, setAllEvents] = useState<Events[]>([]);
     const { eventsData, isLoadingEvents, errorEvents, refetchEvents } = eventsListUseFetch({ searchQuery })
+
+    const handleSearch = () => {
+        refetchEvents()
+    };
 
     useEffect(() => {
         if (eventsData && Array.isArray(eventsData)) {
@@ -111,10 +110,10 @@ export default function HomeScreen({ navigation }: PropsHome) {
                         placeholderTextColor="#888"
                         keyboardType='default'
                         returnKeyType="done"
-                        onChangeText={(text) => setSearchQuery(text)}
-                        onSubmitEditing={() => searchQueryRef.current?.focus()}
+                        onChangeText={setSearchQuery}
+                        onSubmitEditing={handleSearch}
                     />
-                    <TouchableOpacity onPress={() => callSearchRequest()}>
+                    <TouchableOpacity onPress={handleSearch}>
                         <Ionicons name="search" size={20} color={'#000000'} style={{ marginEnd: 12 }} />
                     </TouchableOpacity>
                 </View>
@@ -125,7 +124,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
 
                 {allEvents && allEvents.length > 0 &&
                     <FlatList
-                    style={{width: '90%', backgroundColor: "#60636a30", padding: 15, borderRadius: 6}}
+                        style={{ width: '90%', backgroundColor: "#60636a30", padding: 15, borderRadius: 6 }}
                         data={allEvents}
                         keyExtractor={(item, index) => item.id?.toString()}
                         renderItem={({ item }) => (
@@ -145,7 +144,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
                                             <ThemedText type='xsmallMedium'>{item.dates.start.localDate} {item.dates.start.localTime}</ThemedText>
                                         </View>
 
-                                        <View style={{width: 7}} />
+                                        <View style={{ width: 7 }} />
 
                                         <Ionicons name="chevron-forward" size={24} color="#000" style={styles.icon} />
                                     </View>
@@ -160,8 +159,9 @@ export default function HomeScreen({ navigation }: PropsHome) {
 
                 {/* no data */}
                 {eventsData && eventsData.length == 0 &&
-                    <View style={[styles.cardContainer, { justifyContent: 'center', height: '100%' }]}>
+                    <View style={[styles.cardContainer, { justifyContent: 'center', height: 100, width: '90%' }]}>
                         <Ionicons color={'#CFC3C3'} size={40} name='file-tray' />
+                        <View style={{width: 15}} />
                         <ThemedText type='mediumBold' lightColor={'#CFC3C3'}>No events found</ThemedText>
                     </View>
                 }
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
         padding: 15,
         direction: 'ltr',
         justifyContent: 'center'
-    
+
     },
     cardContainer: {
         borderRadius: 6,

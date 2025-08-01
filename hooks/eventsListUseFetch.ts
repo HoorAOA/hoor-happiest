@@ -3,7 +3,7 @@ import axios from 'axios';
 import APPCONSTANTS from '../constants/AppConstants';
 import { Events } from '../data/Events';
 
-const eventsListUseFetch = ({ searchQuery}: { searchQuery: string}) => {
+const eventsListUseFetch = ({ searchQuery }: { searchQuery: string }) => {
     const [eventsData, setEventsData] = useState<Events[] | null>(null);
     const [isLoadingEvents, setIsLoadingEvents] = useState(false);
     const [errorEvents, setErrorEvents] = useState<string | null>(null);
@@ -14,11 +14,11 @@ const eventsListUseFetch = ({ searchQuery}: { searchQuery: string}) => {
 
         var url = `${APPCONSTANTS.base_url}/events.json?size=10&apikey=Q2JSGSYk3AAisOWAXmp7Bw4RkFb77cMw`
 
-        if(searchQuery != ''){
-             url = `${APPCONSTANTS.base_url}/events.json?size=10&apikey=Q2JSGSYk3AAisOWAXmp7Bw4RkFb77cMw?keyword=${searchQuery}&city=[${searchQuery}]`
+        if (searchQuery != '') {
+            url = `${APPCONSTANTS.base_url}/events.json?size=10&apikey=Q2JSGSYk3AAisOWAXmp7Bw4RkFb77cMw&keyword=${searchQuery}&city=[${searchQuery}]`
         }
 
-        
+
         const options = {
             method: "GET",
             url: url,
@@ -32,10 +32,17 @@ const eventsListUseFetch = ({ searchQuery}: { searchQuery: string}) => {
 
         try {
             const response = await axios.request(options);
-            const result = response.data._embedded.events.map((event: Events) => new Events(event.id, event.name
-                , event.dates, event.images, event.info))
 
-            setEventsData(result);
+            const data = response.data
+
+            if (data && data._embedded && Array.isArray(data._embedded.events)) {
+                const result = data._embedded.events.map((event: Events) =>
+                    new Events(event.id, event.name, event.dates, event.images, event.info)
+                );
+                setEventsData(result);
+            } else {
+                setEventsData([]);
+            }
 
         } catch (errorStack) {
             console.log("errorStack", errorStack)
