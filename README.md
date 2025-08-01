@@ -46,56 +46,56 @@ npx react-native run-ios
 - Splash screen : 
 Implemented **Firebase storage** call to fetch language list with locale. Language list is **saved locally using react-native-sqlite-storage**
 
-![App Screenshot](./assets/screenshots/ic_splash_screenshot.jpeg)
+<img src="./assets/screenshots/ic_splash_screenshot.jpeg" alt="Splash" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Login screen : 
 Validation with state handling, You can enter any username and password, **mock data** is used.
 
-![App Screenshot](./assets/screenshots/ic_validation_screenshot.jpeg)
+<img src="./assets/screenshots/ic_validation_screenshot.jpeg" alt="validaiton" width="400"/>
 
-![App Screenshot](./assets/screenshots/ic_login_screenshot.jpeg)
+<img src="./assets/screenshots/ic_login_screenshot.jpeg" alt="login" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Home screen : 
 **List of Events api call**, search, **add/remove favourite events** (added to local storage).
 
-![App Screenshot](./assets/screenshots/ic_events_list_screenshot.jpeg)
+<img src="./assets/screenshots/ic_events_list_screenshot.jpeg" alt="list" width="400"/>
 
-![App Screenshot](./assets/screenshots/ic_search_screenshot.jpeg)
+<img src="./assets/screenshots/ic_search_screenshot.jpeg" alt="search" width="400"/>
 
-![App Screenshot](./assets/screenshots/ic_no_data_screenshot.jpeg)
+<img src="./assets/screenshots/ic_no_data_screenshot.jpeg" alt="nodata" width="400"/>
 
-![App Screenshot](./assets/screenshots/ic_favourite_screenshot.jpeg)
+<img src="./assets/screenshots/ic_favourite_screenshot.jpeg" alt="favourites" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Event Details screen:
 Call **details api** in home screen and pass response to Details screen.
 
-![App Screenshot](./assets/screenshots/ic_details_screenshot.jpeg)
+<img src="./assets/screenshots/ic_details_screenshot.jpeg" alt="details" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Profile screen : 
 Data saved in login screen and **loaded from local storage**.
 
-![App Screenshot](./assets/screenshots/ic_profile_screenshot.jpeg)
+<img src="./assets/screenshots/ic_profile_screenshot.jpeg" alt="profile" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Select Language :
 Languages loaded from loacl storage, on selection **set app language and locale (RTL/LTR)**.  
 
-![App Screenshot](./assets/screenshots/ic_drawer_screenshot.jpeg)
+<img src="./assets/screenshots/ic_drawer_screenshot.jpeg" alt="drawer" width="400"/>
 
-![App Screenshot](./assets/screenshots/ic_language_screenshot.jpeg)
+<img src="./assets/screenshots/ic_language_screenshot.jpeg" alt="language" width="400"/>
 
 ----------------------------------------------------------------------------------
 
 - Logout :
 Clear user data and preferences and redirect to login screen.  
 
-![App Screenshot](./assets/screenshots/ic_logout_screenshot.jpeg)
+<img src="./assets/screenshots/ic_logout_screenshot.jpeg" alt="logout" width="400"/>
