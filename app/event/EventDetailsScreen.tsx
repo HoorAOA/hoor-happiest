@@ -15,6 +15,7 @@ import { Events } from '../../data/Events';
 import FavouriteEvents from '../../data/FavouriteEvents';
 import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
 import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
+import { ThemedView } from '../../components/ThemedView';
 
 export default function EventDetailsScreen({ navigation, route }: PropsHome) {
     const { passedValues } = route.params;
@@ -28,6 +29,29 @@ export default function EventDetailsScreen({ navigation, route }: PropsHome) {
                     textHeaderProps={{ text: passedValues[0].name }}
                 />
 
+                <View style={{ height: 35 }} />
+
+                <ScrollView style={{ width: '90%' }}>
+                    <ThemedView style={{ backgroundColor: "#60636a30", padding: 15, borderRadius: 6, alignItems: 'center' }}>
+                        <Image
+                            source={{ uri: passedValues[0].images[0].url }}
+                            style={styles.image}
+                        />
+                        <View style={{ height: 15 }} />
+                        <ThemedView style={{ backgroundColor: "#ffffff", padding: 15, borderRadius: 6, width: '100%' }}>
+                            <ThemedText type='mediumBold' >{passedValues[0].name}</ThemedText>
+                            <View style={{ height: 5 }} />
+                            <ThemedText type='xsmallMedium'>{passedValues[0].dates.start.localDate} {passedValues[0].dates.start.localTime}</ThemedText>
+                            <View style={{ height: 15 }} />
+
+                            <ThemedText type='xsmallMedium'>{passedValues[0].info}</ThemedText>
+                        </ThemedView>
+
+                    </ThemedView>
+                </ScrollView>
+
+
+
             </SafeAreaView >
         </>
     );
@@ -38,5 +62,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
         alignItems: 'center'
+    },
+    image: {
+        width: 120,
+        height: 120,
+        borderRadius: 6,
+        marginRight: 10,
     },
 });

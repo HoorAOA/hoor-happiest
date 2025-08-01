@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: '#60636a12'
   }
 });

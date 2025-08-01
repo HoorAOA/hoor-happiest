@@ -159,6 +159,8 @@ export default function HomeScreen({ navigation }: PropsHome) {
                     textHeaderProps={{ text: 'Home' }}
                 />
 
+<View style={{ height: 25 }} />
+
                 <View style={[styles.inputContainer, { width: '90%', height: 50, direction: 'ltr' }]}>
                     <TextInput
                         style={styles.input}
