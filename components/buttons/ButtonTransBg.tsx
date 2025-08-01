@@ -1,5 +1,4 @@
 import { Dimensions, Image, TouchableOpacity } from 'react-native';
-import { COLORS , SIZES } from '../../constants/constants';
 import { StyleSheet } from 'react-native';
 
 const ButtonTransBg = ({iconUrl, dimension, handlePress} : {iconUrl : any, dimension: any, handlePress: any}) => {

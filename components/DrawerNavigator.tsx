@@ -9,6 +9,7 @@ import * as Keychain from 'react-native-keychain';
 import UserPreference from '../data/UserPreference';
 import { addSharedPreferencesHandler } from '../db/sharedPreferencesHandler';
 import { PropsHome } from '../constants/types';
+import ProfileScreen from '../app/profile/ProfileScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -17,7 +18,6 @@ function DrawerNavigator({ navigation }: any) {
 
   const clearUserData = async () => {
     const db = await connectToDatabase()
-    await Keychain.setInternetCredentials('token', 'sge', "");
     await addSharedPreferencesHandler(db,
       [new UserPreference('email', "")
         , new UserPreference('mobile', "")
@@ -39,6 +39,8 @@ function DrawerNavigator({ navigation }: any) {
         drawerInactiveTintColor: "#60636A"
       }}>
         <Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: ({ focused, color, size }: { focused: any, color: any, size: any }) => <Ionicons color={color} size={20} name='home' /> }} />
+
+        <Drawer.Screen name="Profile" component={ProfileScreen} options={{ drawerIcon: ({ focused, color, size }) => <Ionicons color={color} size={20} name='person' /> }} />
 
         <Drawer.Screen
           name="Logout"
@@ -67,7 +69,7 @@ function DrawerNavigator({ navigation }: any) {
           setDialogVisible(false)
         }}
         dismissable={false}
-      /> 
+      />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { SQLiteDatabase, ResultSet } from 'react-native-sqlite-storage';
-import UserPreference from '../../data/UserPreference';
+import UserPreference from '../data/UserPreference';
 
 const addSharedPreferencesHandler = async (db: SQLiteDatabase, userPreferences: UserPreference[]) => {
     let insertQuery = `
