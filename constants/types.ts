@@ -1,5 +1,6 @@
 export type StackParamList = {
   Splash: undefined;
+  Login: undefined;
 };
 
 /////////////////////////
@@ -7,6 +8,8 @@ export type StackParamList = {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type PropsSplash = NativeStackScreenProps<StackParamList, 'Splash'>;
+
+export type PropsLogin = NativeStackScreenProps<StackParamList, 'Login'>;
 
 /////////////////////////
 

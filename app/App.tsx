@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackParamList } from '../constants/types';
 import { useColorScheme } from '../hooks/colorHooks/useColorScheme';
 import { connectToDatabase, dbInitializer } from '../db/db';
+import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LoginScreen from './login/LoginScreen';
 
