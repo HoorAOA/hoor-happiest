@@ -1,5 +1,5 @@
 import { StyleSheet, Image, View, type ViewProps } from 'react-native';
-import { useThemeColor } from '../../hooks/colorHooks/useThemeColor';
+import { useThemeColor } from '../../bridge/hooks/useThemeColor';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 import { StatusBar, SafeAreaView } from 'react-native';

@@ -1,6 +1,6 @@
 import { Text, type TextProps, StyleSheet, KeyboardAvoidingView } from 'react-native';
 
-import { useThemeColor } from '../hooks/colorHooks/useThemeColor';
+import { useThemeColor } from '../bridge/hooks/useThemeColor';
 
 
 export type ThemedTextProps = TextProps & {

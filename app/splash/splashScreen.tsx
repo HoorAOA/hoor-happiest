@@ -7,12 +7,12 @@ import ActionDialog from '../../components/dialogs/ActionDialog';
 import NetInfo from '@react-native-community/netinfo';
 import { ThemedText } from '../../components/ThemedText';
 import { ThemedView } from '../../components/ThemedView';
-import { fetchConfigurations } from '../../hooks/firebase/firebaseUtils';
-import Languages from '../../data/Languages';
-import { connectToDatabase } from '../../db/db';
-import { addLanguages } from '../../db/languagesHandler';
-import { addSharedPreferencesHandler, getSingleUserPreference } from '../../db/sharedPreferencesHandler';
-import UserPreference from '../../data/UserPreference';
+import { fetchConfigurations } from '../../bridge/services/firebaseService';
+import Languages from '../../bridge/models/Languages';
+import { connectToDatabase } from '../../bridge/database/db';
+import { addLanguages } from '../../bridge/database/languagesHandler';
+import { addSharedPreferencesHandler, getSingleUserPreference } from '../../bridge/database/sharedPreferencesHandler';
+import UserPreference from '../../bridge/models/UserPreference';
 import Images from '../../constants/Images';
 
 

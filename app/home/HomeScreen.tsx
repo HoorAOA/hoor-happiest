@@ -1,20 +1,21 @@
 
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedHeader } from '../../components/headers/ThemedHeader';
 import { ThemedText } from '../../components/ThemedText';
 import React, { useMemo, useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { PropsHome } from '../../constants/types';
-import { connectToDatabase } from '../../db/db';
+import { connectToDatabase } from '../../bridge/database/db';
 import ActionDialog from '../../components/dialogs/ActionDialog';
-import UserPreference from '../../data/UserPreference';
-import { addSharedPreferencesHandler } from '../../db/sharedPreferencesHandler';
+import UserPreference from '../../bridge/models/UserPreference';
+import { addSharedPreferencesHandler } from '../../bridge/database/sharedPreferencesHandler';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Icons from '../../constants/Icons';
-import eventsListUseFetch from '../../hooks/eventsListUseFetch';
-import { Events } from '../../data/Events';
-import FavouriteEvents from '../../data/FavouriteEvents';
-import { addFavouriteEvents, getFavouriteEvents, removeFavoriteEvent } from '../../db/favouriteEventsHandler';
-import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
+import { useEventDetails } from '../../bridge/hooks';
+import { useEventsList } from '../../bridge/hooks';
+import { Events } from '../../bridge/models/Events';
+import FavouriteEvents from '../../bridge/models/FavouriteEvents';
+import { addFavouriteEvents, getFavouriteEvents, removeFavoriteEvent } from '../../bridge/database/favouriteEventsHandler';
 import i18n from '../../localization/i18n';
 
 export default function HomeScreen({ navigation }: PropsHome) {
@@ -23,7 +24,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
     const [searchQuery, setSearchQuery] = useState('');
 
     const [allEvents, setAllEvents] = useState<Events[]>([]);
-    const { eventsData, isLoadingEvents, errorEvents, refetchEvents } = eventsListUseFetch({ searchQuery })
+    const { eventsData, isLoadingEvents, errorEvents, refetchEvents } = useEventsList(searchQuery)
 
     const handleSearch = () => {
         refetchEvents()
@@ -150,7 +151,7 @@ export default function HomeScreen({ navigation }: PropsHome) {
 
     // event details
     const [loadingId, setLoadingId] = useState<string | null>(null);
-    const { eventsDetailsData, isLoadingEventDetails, errorEventDetails, refetchEventDetails } = eventDetailsUseFetch({ loadingId })
+    const { eventsDetailsData, isLoadingEventDetails, errorEventDetails, refetchEventDetails } = useEventDetails(loadingId)
 
     useEffect(() => {
         if (eventsDetailsData) {
@@ -165,9 +166,11 @@ export default function HomeScreen({ navigation }: PropsHome) {
     }, [loadingId])
 
 
+    const insets = useSafeAreaInsets();
+
     return (
         <>
-            <SafeAreaView style={styles.safeAreaStyle} >
+            <SafeAreaView style={[styles.safeAreaStyle, { paddingTop: insets.top / 3 }]} >
                 <ThemedHeader
                     firstButtonProps={{ iconUrl: Icons.ic_menu, dimension: 20, handlePress: () => navigation.toggleDrawer() }}
                     iconProps={{}}
@@ -197,11 +200,13 @@ export default function HomeScreen({ navigation }: PropsHome) {
                 {isLoadingEvents && <ActivityIndicator size='small' color="#000000" />}
 
                 {allEvents && allEvents.length > 0 &&
-                    <FlatList
-                        style={{ width: '90%', backgroundColor: "#60636a30", padding: 15, borderRadius: 6 }}
-                        data={allEvents}
-                        keyExtractor={(item, index) => item.id?.toString()}
-                        renderItem={({ item }) => (
+                    <View style={{ flex: 1, width: '90%' }}>
+                        <FlatList
+                            style={{ flex: 1, backgroundColor: "#60636a30", padding: 15, borderRadius: 6 }}
+                            contentContainerStyle={{ paddingBottom: (insets?.bottom ?? 0) / 2 + 20 }}
+                            data={allEvents}
+                            keyExtractor={(item, index) => item.id?.toString()}
+                            renderItem={({ item }) => (
 
                             <View style={[styles.eventContainer]}>
 
@@ -242,7 +247,8 @@ export default function HomeScreen({ navigation }: PropsHome) {
                         ItemSeparatorComponent={() => (
                             <View style={{ height: 7, backgroundColor: 'transparent' }} />
                         )}
-                    />
+                        />
+                    </View>
                 }
 
                 {/* no data */}

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import { View, type ViewProps } from 'react-native';
-import { useThemeColor } from '../hooks/colorHooks/useThemeColor';
+import { useThemeColor } from '../bridge/hooks/useThemeColor';
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;

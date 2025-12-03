@@ -1,5 +1,5 @@
 import { StyleSheet, Image, View, type ViewProps } from 'react-native';
-import { useThemeColor } from '../../hooks/colorHooks/useThemeColor';
+import { useThemeColor } from '../../bridge/hooks/useThemeColor';
 import ButtonTransBg from '../buttons/ButtonTransBg';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';

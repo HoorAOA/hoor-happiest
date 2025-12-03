@@ -6,14 +6,14 @@ import React, { Component, useEffect, useCallback } from 'react';
 import SplashScreen from './splash/splashScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackParamList } from '../constants/types';
-import { useColorScheme } from '../hooks/colorHooks/useColorScheme';
-import { connectToDatabase, dbInitializer } from '../db/db';
+import { useColorScheme } from '../bridge/hooks/useColorScheme';
+import { connectToDatabase, dbInitializer } from '../bridge/database/db';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LoginScreen from './login/LoginScreen';
 import DrawerNavigator from '../components/DrawerNavigator';
 import EventDetailsScreen from './event/EventDetailsScreen';
-import { getSingleUserPreference } from '../db/sharedPreferencesHandler';
+import { getSingleUserPreference } from '../bridge/database/sharedPreferencesHandler';
 import { I18nManager } from 'react-native';
 import i18n from '../localization/i18n';
 

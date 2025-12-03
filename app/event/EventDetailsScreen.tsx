@@ -1,29 +1,21 @@
 
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View, ImageBackground, Keyboard, TouchableOpacity, FlatList, Platform, Text, Image, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, BackHandler } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedHeader } from '../../components/headers/ThemedHeader';
 import { ThemedText } from '../../components/ThemedText';
 import React, { useMemo, useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { PropsHome } from '../../constants/types';
-import { connectToDatabase } from '../../db/db';
-import ActionDialog from '../../components/dialogs/ActionDialog';
-import UserPreference from '../../data/UserPreference';
-import { addSharedPreferencesHandler } from '../../db/sharedPreferencesHandler';
-import Ionicons from '@react-native-vector-icons/ionicons';
 import Icons from '../../constants/Icons';
-import eventsListUseFetch from '../../hooks/eventsListUseFetch';
-import { Events } from '../../data/Events';
-import FavouriteEvents from '../../data/FavouriteEvents';
-import { addFavouriteEvents, getFavouriteEvents } from '../../db/favouriteEventsHandler';
-import eventDetailsUseFetch from '../../hooks/eventDetailsUseFetch';
 import { ThemedView } from '../../components/ThemedView';
 import { I18nManager } from 'react-native';
 
 export default function EventDetailsScreen({ navigation, route }: PropsHome) {
     const { passedValues } = route.params;
+const insets = useSafeAreaInsets();
 
     return (
         <>
-            <SafeAreaView style={styles.safeAreaStyle} >
+            <SafeAreaView style={[styles.safeAreaStyle, { paddingTop: insets.top / 3 }]} >
                 <ThemedHeader
                     firstButtonProps={{ iconUrl: I18nManager.isRTL ? Icons.ic_next : Icons.ic_back, dimension: 20, handlePress: () => navigation.goBack() }}
                     iconProps={{}}

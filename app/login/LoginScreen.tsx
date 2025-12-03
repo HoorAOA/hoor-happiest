@@ -8,9 +8,9 @@ import { ThemedText } from '../../components/ThemedText';
 import { PropsLogin } from '../../constants/types';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { CustomStatusBar } from '../../components/headers/CustomStatusBar';
-import { connectToDatabase } from '../../db/db';
-import { addSharedPreferencesHandler } from '../../db/sharedPreferencesHandler';
-import UserPreference from '../../data/UserPreference';
+import { connectToDatabase } from '../../bridge/database/db';
+import { addSharedPreferencesHandler } from '../../bridge/database/sharedPreferencesHandler';
+import UserPreference from '../../bridge/models/UserPreference';
 import Images from '../../constants/Images';
 
 export default function LoginScreen({ navigation }: PropsLogin) {

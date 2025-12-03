@@ -1,13 +1,14 @@
 import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Image, Text } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from '../../components/ThemedText';
 import { ThemedView } from '../../components/ThemedView';
 import Images from '../../constants/Images';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PropsHome } from '../../constants/types';
-import { connectToDatabase } from '../../db/db';
-import { getSingleUserPreference } from '../../db/sharedPreferencesHandler';
+import { connectToDatabase } from '../../bridge/database/db';
+import { getSingleUserPreference } from '../../bridge/database/sharedPreferencesHandler';
 import { ThemedHeader } from '../../components/headers/ThemedHeader';
 import Icons from '../../constants/Icons';
 
@@ -33,9 +34,11 @@ export default function ProfileScreen({ navigation }: PropsHome) {
         fetchUserDetails()
     }, []);
 
+    const insets = useSafeAreaInsets();
+
     return (
         <GestureHandlerRootView style={styles.fullFlex}>
-            <SafeAreaView style={styles.safeAreaStyle}>
+            <SafeAreaView style={[styles.safeAreaStyle, { paddingTop: insets.top / 3 }]}>
                 <ThemedHeader
                     firstButtonProps={{ iconUrl: Icons.ic_menu, dimension: 20, handlePress: () => navigation.toggleDrawer() }}
                     iconProps={{}}
